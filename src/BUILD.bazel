@@ -13,10 +13,20 @@ cc_binary(
 )
 
 cc_binary(
-    name = "hello",
-    srcs = ["hello.cpp"],
+    name = "gen",
+    srcs = ["gen.cpp"],
     copts = global_cppopts(),
     deps = [
+        "@fmt//:main",
+    ],
+)
+
+cc_binary(
+    name = "exercise-1",
+    srcs = ["exercise-1.cpp"],
+    copts = global_cppopts(),
+    deps = [
+        "//src/common:lib",
         "@fmt//:main",
     ],
 )
