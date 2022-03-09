@@ -333,13 +333,7 @@ ASALocalRun/
 *.out
 
 # Bazel
-bazel-bin
-bazel-nick
-bazel-out
-bazel-testlogs
-bazel-vscode-cpp-container
-bazel-game-cpp
-bazel-cpp-game
+bazel-*
 .cache/
 compile_commands.json
 *.swp
