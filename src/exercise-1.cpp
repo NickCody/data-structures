@@ -3,7 +3,7 @@
 #include <vector>
 #include <stdlib.h>
 
-// Exercise - Find the mean, median, and mode for the set of numbers in the input file
+// Exercise 1 - Find the mean, median, and mode for the set of numbers in the input file
 //
 
 using namespace fmt;
