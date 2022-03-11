@@ -11,15 +11,15 @@ using namespace ds_common;
 
 using number = uint64_t;
 
-number calc_mean(vector<number>& data) {
+number calc_mean(const vector<number>& data) {
   return data.size();
 }
 
-number calc_median(vector<number>& data) {
+number calc_median(const vector<number>& data) {
   return data.size();
 }
 
-number calc_mode(vector<number>& data) {
+number calc_mode(const vector<number>& data) {
   return data.size();
 }
 
