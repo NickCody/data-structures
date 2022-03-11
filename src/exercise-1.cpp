@@ -9,15 +9,17 @@
 using namespace fmt;
 using namespace ds_common;
 
-int calc_mean(vector<int>& data) {
+using number = uint64_t;
+
+number calc_mean(vector<number>& data) {
   return data.size();
 }
 
-int calc_median(vector<int>& data) {
+number calc_median(vector<number>& data) {
   return data.size();
 }
 
-int calc_mode(vector<int>& data) {
+number calc_mode(vector<number>& data) {
   return data.size();
 }
 
@@ -27,7 +29,7 @@ int main(int argc, char** argv) {
   auto input = stdout_or_file(filename);
 
   string line;
-  vector<int> data;
+  vector<number> data;
   while (std::getline(*input, line)) {
     data.push_back(atoi(line.c_str()));
   }
