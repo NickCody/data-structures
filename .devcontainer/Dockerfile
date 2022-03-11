@@ -40,6 +40,7 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
   npm \
   lua5.4 \
   liblua5.4-dev \
+  bc \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get clean
 
@@ -58,16 +59,6 @@ RUN curl -L -O https://golang.org/dl/go1.15.5.linux-amd64.tar.gz \
 RUN curl -L -O https://github.com/bazelbuild/buildtools/releases/download/3.5.0/buildifier \
   && chmod +x buildifier \
   && mv buildifier /usr/local/bin
-
-RUN curl -L -O https://github.com/actor-framework/actor-framework/archive/c2be26e7f9e3e84ef14730590fc4e7b25fb9d29a.zip \
-  && unzip -d caf c2be26e7f9e3e84ef14730590fc4e7b25fb9d29a.zip \
-  && cd caf/actor-framework-c2be26e7f9e3e84ef14730590fc4e7b25fb9d29a/ \
-  && ./configure --generator=Ninja \
-  && cd build \
-  && cmake -G "Ninja" .. \
-  && ninja install \
-  && cd ../../.. \
-  && rm -rf caf
 
 RUN curl -L -O https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz \
   && tar xvfz yaml-cpp-0.7.0.tar.gz \
