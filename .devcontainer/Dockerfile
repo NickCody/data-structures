@@ -29,8 +29,8 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
   ca-certificates \
   ninja-build \
   libssl-dev \
-  bazel \
-  redis
+  bazel
+## redis # installed manually below for 6.9/7.x
 # && rm -rf /var/lib/apt/lists/* \
 # && apt-get clean
 
@@ -50,34 +50,12 @@ RUN curl -L -O https://github.com/bazelbuild/buildtools/releases/download/3.5.0/
   && chmod +x buildifier \
   && mv buildifier /usr/local/bin
 
-RUN curl -L -O https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz \
-  && tar xvfz yaml-cpp-0.7.0.tar.gz \
-  && cd yaml-cpp-yaml-cpp-0.7.0 \
-  && mkdir build \
-  && cd build \
-  && cmake -G "Ninja" .. \
-  && ninja install \
-  && cd ../.. \
-  && rm -rf yaml-cpp-yaml-cpp-0.7.0  \
-  && rm yaml-cpp-0.7.0.tar.gz
-
-
-RUN curl -L -O https://github.com/redis/hiredis/archive/refs/heads/master.zip \
-  && unzip master.zip \
-  && cd hiredis-master \
-  && make \
-  && make install \
-  && cd .. \
-  && rm master.zip \
-  && rm -rf hiredis-master
-
 RUN sudo apt install -y \
   yamllint \
   curl \
   gnupg2 \
   vim \
   graphviz xdot \
-  clang-format \
   docker-ce-cli \
   tree \
   moreutils \
@@ -86,24 +64,15 @@ RUN sudo apt install -y \
   iputils-ping \
   ssh-askpass \
   npm \
-  lua5.4 \
-  liblua5.4-dev \
   tmux
 
-RUN apt install -y libzmq3-dev \
-  && git clone https://github.com/zeromq/libzmq.git \
-  && cd libzmq \
-  && ./autogen.sh \
-  && ./configure \
-  && make \
-  && make install 
 
-RUN git clone https://github.com/zeromq/cppzmq.git \
-  && cd cppzmq \
-  && mkdir build \
-  && cd build \
-  && cmake .. \
-  && make -j4 install
+RUN wget https://get.bzl.io/linux_amd64/v1.3.19/bzl \
+  && mv bzl /usr/local/bin \
+  && chmod +x /usr/local/bin/bzl
+
+RUN apt update \
+  && apt install -y doxygen clang-format clangd
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
