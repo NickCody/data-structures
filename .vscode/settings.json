@@ -1,7 +1,6 @@
 {
   "terminal.integrated.sendKeybindingsToShell": true,
   "terminal.integrated.allowChords": false,
-  "C_Cpp.errorSquiggles": "Disabled",
   "testMate.cpp.test.advancedExecutables": [
     {
       "pattern": "./bazel-out/k8-dbg/**/*test.runfiles/**/*test",
@@ -17,7 +16,6 @@
   "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
   "terminal.integrated.scrollback": 100000,
   "editor.detectIndentation": false,
-  "bazel.buildifierFixOnFormat": true,
   "bsv.bzl.lsp.enableCodelenses": true,
   "bsv.bzl.lsp.enableCodelensCopyLabel": true,
   "bsv.bzl.lsp.enableCodelensCodesearch": true,
@@ -118,5 +116,7 @@
     "valarray": "cpp"
   },
   "files.autoSave": "onFocusChange",
-  "terminal.integrated.shellIntegration.enabled": true
+  "C_Cpp.intelliSenseEngine": "Disabled",
+  "C_Cpp.autocomplete": "Disabled",
+  "C_Cpp.errorSquiggles": "Disabled",
 }

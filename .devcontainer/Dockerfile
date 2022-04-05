@@ -3,9 +3,13 @@ ARG VARIANT="bullseye"
 
 FROM mcr.microsoft.com/vscode/devcontainers/cpp:0-${VARIANT}
 
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+RUN mv /etc/apt/sources.list /tmp/ \
+  && apt update \
+  && mv /tmp/sources.list /etc/apt/ \
+  && apt update
 
-RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - \
+  && wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
   && echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" >> /etc/apt/sources.list \
   && echo "deb-src http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main" >> /etc/apt/sources.list \
   && echo "deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-12 main"  >> /etc/apt/sources.list \
@@ -13,6 +17,8 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
   && curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg \
   && sudo mv bazel.gpg /etc/apt/trusted.gpg.d/ \
   && echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list \
+  && curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg \
+  && echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list \
   && apt-get update \
   && apt install -y software-properties-common \
   && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" \
@@ -21,28 +27,12 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add - \
   && apt-get -y install --no-install-recommends \
   apt-transport-https \
   ca-certificates \
-  yamllint \
-  curl \
-  gnupg2 \
-  libssl-dev \
-  vim \
-  graphviz xdot \
   ninja-build \
-  clang-format \
-  docker-ce-cli \
-  bazel \
-  tree \
-  moreutils \
-  telnet \
-  rlwrap \
-  iputils-ping \
-  ssh-askpass \
-  npm \
-  lua5.4 \
-  liblua5.4-dev \
-  bc \
-  && rm -rf /var/lib/apt/lists/* \
-  && apt-get clean
+  libssl-dev \
+  bazel
+## redis # installed manually below for 6.9/7.x
+# && rm -rf /var/lib/apt/lists/* \
+# && apt-get clean
 
 RUN curl -L -O https://github.com/gabime/spdlog/archive/refs/tags/v1.9.2.tar.gz \
   && tar xvfz v1.9.2.tar.gz \
@@ -60,26 +50,29 @@ RUN curl -L -O https://github.com/bazelbuild/buildtools/releases/download/3.5.0/
   && chmod +x buildifier \
   && mv buildifier /usr/local/bin
 
-RUN curl -L -O https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-0.7.0.tar.gz \
-  && tar xvfz yaml-cpp-0.7.0.tar.gz \
-  && cd yaml-cpp-yaml-cpp-0.7.0 \
-  && mkdir build \
-  && cd build \
-  && cmake -G "Ninja" .. \
-  && ninja install \
-  && cd ../.. \
-  && rm -rf yaml-cpp-yaml-cpp-0.7.0  \
-  && rm yaml-cpp-0.7.0.tar.gz
+RUN sudo apt install -y \
+  yamllint \
+  curl \
+  gnupg2 \
+  vim \
+  graphviz xdot \
+  docker-ce-cli \
+  tree \
+  moreutils \
+  telnet \
+  rlwrap \
+  iputils-ping \
+  ssh-askpass \
+  npm \
+  tmux
 
 
-RUN curl -L -O https://github.com/redis/hiredis/archive/refs/heads/master.zip \
-  && unzip master.zip \
-  && cd hiredis-master \
-  && make \
-  && make install \
-  && cd .. \
-  && rm master.zip \
-  && rm -rf hiredis-master
+RUN wget https://get.bzl.io/linux_amd64/v1.3.19/bzl \
+  && mv bzl /usr/local/bin \
+  && chmod +x /usr/local/bin/bzl
+
+RUN apt update \
+  && apt install -y doxygen clang-format clangd
 
 RUN locale-gen en_US.UTF-8
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
